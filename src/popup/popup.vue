@@ -2,5 +2,5 @@
 </script>
 
 <template>
-  <div>Hello</div>
+  <div class="text-xl text-red-500">Hello</div>
 </template>
