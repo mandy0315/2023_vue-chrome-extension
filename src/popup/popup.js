@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import App from './Popup.vue'
+import App from './popup.vue'
 
 import "../assets/styles/popup.scss";
 
