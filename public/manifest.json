@@ -11,5 +11,9 @@
     "16": "images/hello_extensions.png",
     "48": "images/hello_extensions.png",
     "128": "images/hello_extensions.png"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
   }
 }

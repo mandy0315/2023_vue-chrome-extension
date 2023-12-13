@@ -22,9 +22,12 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: resolve(__dirname, "popup.html"),
+        background: resolve(__dirname, 'src/background.js'),
       },
       output: {
-        entryFileNames: `js/[name].js`,
+        entryFileNames: (chunkInfo) => {
+          return chunkInfo.name === 'background'? `[name].js` : `js/[name].js`
+        },
         chunkFileNames: `js/[name].js`,
         assetFileNames: (chunkInfo) => {
           const fileExtName = chunkInfo.name.split('.')[chunkInfo.name.split('.').length - 1];
