@@ -15,5 +15,21 @@
   "background": {
     "service_worker": "background.js",
     "type": "module"
-  }
+  },
+  "permissions": [
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ]
+
 }
