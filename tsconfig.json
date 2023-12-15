@@ -12,11 +12,12 @@
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
     "noEmit": true,
-    
+
     "paths": {
       "@/*": ["./src/*"],
     },
     "types": [
+      "chrome", // 識別 chrome
       "vite/client" // 識別 import.meta.env
     ],
     "forceConsistentCasingInFileNames": false, // 禁用檢查路徑檔案大小寫
