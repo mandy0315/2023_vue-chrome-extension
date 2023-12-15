@@ -30,6 +30,9 @@
         "<all_urls>"
       ]
     }
-  ]
+  ],
+  "externally_connectable": {
+    "matches": ["https://github.com/mandy0315/*"]
+  }
 
 }
