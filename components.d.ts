@@ -13,5 +13,7 @@ declare module 'vue' {
     'IMaterialSymbols:dataInfoAlertRounded': typeof import('~icons/material-symbols/data-info-alert-rounded')['default']
     'IMaterialSymbols:delete': typeof import('~icons/material-symbols/delete')['default']
     'IMaterialSymbols:editSquareRounded': typeof import('~icons/material-symbols/edit-square-rounded')['default']
+    'IMaterialSymbols:nightsStayRounded': typeof import('~icons/material-symbols/nights-stay-rounded')['default']
+    'IMaterialSymbols:wbSunnyRounded': typeof import('~icons/material-symbols/wb-sunny-rounded')['default']
   }
 }
