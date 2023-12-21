@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { getCurrentTab, setStorageData, getStorageData } from '@/utils/useChromeAPI';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 import { TabList } from '@/types/popup';
 
@@ -12,6 +12,11 @@ const tabList = ref<TabList>([]);
 const isRepeatURL = ref(false);
 const isAddTab = ref(true);
 const editTabUrl = ref('');
+const listLimit = ref(10);
+
+const isListOverLimit = computed(() => {
+  return tabList.value.length > listLimit.value;
+});
 
 const updateCurrTabInfo = async () => {
   const tab = await getCurrentTab();
@@ -24,6 +29,7 @@ const updateTabList = async () => {
   if (arr.length > 0) {
     tabList.value = arr as TabList;
   }
+  // test data
   // tabList.value = [
   //   {
   //     tabTitle: '測試測試測試測試測試1',
@@ -35,8 +41,35 @@ const updateTabList = async () => {
   //   },
   //   {
   //     tabTitle: '測試測試測試測試測試3',
-  //     tabUrl:
-  //       'https://stackoverflow.com/questions/70375337/chrome-extension-chrome-runtime-lasterror-no-tab-with-id-error',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2825.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試4',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2826.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試5',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2827.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試6',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2828.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試7',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2829.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試8',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2830.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試9',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2831.html',
+  //   },
+  //   {
+  //     tabTitle: '測試測試測試測試測試10',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2832.html',
   //   },
   // ];
 };
@@ -54,28 +87,39 @@ const saveTab = async () => {
     tabUrl: tabInfo.value.url,
   };
 
+  const checkIsRepeatURL = () => {
+    isRepeatURL.value = false;
+
+    const findUrl = tabList.value.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
+    if (findUrl) {
+      isRepeatURL.value = true;
+    }
+  };
+
   if (editTabUrl.value === '') {
     // 新增Tab
-    isRepeatURL.value = false;
     if (tabList.value.length > 0) {
-      const findUrl = tabList.value.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
-      if (findUrl) {
-        isRepeatURL.value = true;
-      } else {
-        tabList.value.push(tab);
-        await setStorageData({ tabList: tabList.value });
-      }
+      checkIsRepeatURL();
+      if (isRepeatURL.value) return;
+      tabList.value.push(tab);
+      await setStorageData({ tabList: tabList.value });
     } else {
       await setStorageData({ tabList: [tab] });
     }
   } else {
     // 編輯Tab
     tabList.value = tabList.value.map((item: TabList[0]) => {
-      if (item.tabUrl === editTabUrl.value) return tab;
+      if (item.tabUrl === editTabUrl.value) {
+        checkIsRepeatURL();
+        return isRepeatURL.value ? item : tab;
+      }
       return item;
     });
-    await setStorageData({ tabList: tabList.value });
-    editTabUrl.value = '';
+
+    if (!isRepeatURL.value) {
+      editTabUrl.value = '';
+      await setStorageData({ tabList: tabList.value });
+    }
   }
 
   updateTabList();
@@ -95,8 +139,10 @@ const editTab = (currTitle: string, currUrl: string) => {
     tabInfo.value.title = currTitle;
     tabInfo.value.url = currUrl;
   }
+  isRepeatURL.value = false;
 };
 const cancelTab = () => {
+  isRepeatURL.value = false;
   editTabUrl.value = '';
   tabInfo.value.title = '';
   tabInfo.value.url = '';
@@ -109,83 +155,108 @@ onMounted(() => {
 </script>
 
 <template>
-  <main class="w-[520px] h-[400px] bg-white">
-    <header class="px-4 h-12 flex items-center bg-blue-300 shadow">
+  <main class="w-[520px]">
+    <header class="px-4 h-12 flex items-center bg-blue-300">
       <h1 class="text-gray-50">SCRATCH URLS</h1>
     </header>
-    <section class="relative">
-      <button
-        @click="toggleAddTab"
-        :disabled="editTabUrl !== ''"
-        class="rounded-b-md inline-block py-1 px-2 absolute top-0 right-0 shadow border-l border-r border-b"
-        :class="editTabUrl !== '' ? 'bg-gray-100 text-gray-300' : ' bg-white text-gray-500'"
-      >
-        <i-ic:outline-remove-circle v-if="isAddTab" class="inline-block" />
-        <i-material-symbols:add-circle-rounded v-else class="inline-block" />
+    <div class="h-[380px] bg-white overflow-hidden overflow-y-scroll c-scrollbar-style relative">
+      <section class="relative">
+        <button
+          @click="toggleAddTab"
+          :disabled="editTabUrl !== ''"
+          class="rounded-b-md inline-block py-1 px-2 absolute top-0 right-2 shadow border-l border-r border-b"
+          :class="editTabUrl !== '' ? 'bg-gray-100 text-gray-300' : ' bg-white text-gray-500'"
+        >
+          <i-ic:outline-remove-circle v-if="isAddTab" class="inline-block" />
+          <i-material-symbols:add-circle-rounded v-else class="inline-block" />
 
-        <span class="text-sm pl-1">新增網址</span>
-      </button>
-      <div class="bg-gray-100 transition-all duration-200" :class="isAddTab ? 'h-[180px]' : 'h-0'">
-        <div v-if="isAddTab" class="px-4 py-4">
-          <div class="h-8">
-            <p v-if="isRepeatURL" class="text-red-600">* 網址已經存在，請重新確認 !</p>
-          </div>
-          <input
-            type="text"
-            v-model="tabInfo.title"
-            placeholder="輸入網址名稱"
-            class="block w-full border-gray-200 border rounded-md p-1 mb-2"
-          />
-          <input
-            type="text"
-            v-model="tabInfo.url"
-            placeholder="輸入網址"
-            class="block w-full border-gray-200 border rounded-md p-1 mb-2"
-          />
-          <button @click="saveTab" class="bg-blue-100 text-blue-500 px-2 py-1 rounded text-sm">儲存</button>
-        </div>
-      </div>
-    </section>
-    <section class="px-4 py-10">
-      <ul v-if="tabList.length > 0">
-        <template v-for="item in tabList" :key="item.tabTitle">
-          <li class="flex border-b py-2 px-4">
-            <a
-              :href="item.tabUrl"
-              target="_blank"
-              class="text-blue-500 underline underline-offset-2"
-              :alt="item.tabUrl"
-              >{{ item.tabTitle }}</a
-            >
-
-            <div class="ml-auto">
-              <button @click="editTab(item.tabTitle, item.tabUrl)" class="px-1">
-                <i-material-symbols:edit-square-rounded class="text-gray-500" />
-              </button>
-              <button class="px-1" @click="deleteTab(item.tabUrl)">
-                <i-material-symbols:delete class="text-gray-500" />
-              </button>
+          <span class="text-sm pl-1">新增網址</span>
+        </button>
+        <div class="bg-gray-100 transition-all duration-200" :class="isAddTab ? 'h-[180px]' : 'h-0'">
+          <div v-if="isAddTab" class="px-4 py-4">
+            <div class="h-8">
+              <p v-if="isRepeatURL" class="text-red-600">* 網址已經存在，請重新確認 !</p>
+              <p v-if="isListOverLimit" class="text-red-600">* 超過暫存數量！請選擇擴充或刪除列表網址</p>
             </div>
-          </li>
-          <div v-if="editTabUrl === item.tabUrl" class="bg-gray-100 px-4 py-2">
             <input
               type="text"
               v-model="tabInfo.title"
               placeholder="輸入網址名稱"
-              class="block w-full border-gray-200 text-sm border rounded-md p-1 mb-2"
+              class="block w-full border-gray-200 border rounded-md p-1 mb-2"
             />
             <input
               type="text"
               v-model="tabInfo.url"
               placeholder="輸入網址"
-              class="block w-full border-gray-200 text-sm border rounded-md p-1 mb-2"
+              class="block w-full border-gray-200 border rounded-md p-1 mb-2"
             />
-            <button @click="saveTab" class="bg-blue-100 text-blue-500 px-2 py-1 mr-2 rounded text-sm">修改</button>
-            <button @click="cancelTab" class="bg-blue-100 text-blue-500 px-2 py-1 rounded text-sm">取消</button>
+            <button @click="saveTab" class="bg-blue-100 text-blue-500 px-2 py-1 rounded text-sm">儲存</button>
           </div>
+        </div>
+      </section>
+      <section class="px-4 py-6">
+        <template v-if="tabList.length > 0">
+          <div>
+            <h2 class="font-black text-gray-500 pb-3 inline-block pr-2">暫存列表</h2>
+            <span class="text-gray-500 text-sm">＊限制暫存 {{ listLimit }} 列網址</span>
+          </div>
+
+          <ul>
+            <template v-for="item in tabList" :key="item.tabTitle">
+              <li class="flex border-b py-2 px-4">
+                <a
+                  :href="item.tabUrl"
+                  target="_blank"
+                  class="text-blue-500 underline underline-offset-2"
+                  :alt="item.tabUrl"
+                  >{{ item.tabTitle }}</a
+                >
+
+                <div class="ml-auto">
+                  <button @click="editTab(item.tabTitle, item.tabUrl)" class="px-1">
+                    <i-material-symbols:edit-square-rounded class="text-gray-500" />
+                  </button>
+                  <button class="px-1" @click="deleteTab(item.tabUrl)">
+                    <i-material-symbols:delete class="text-gray-500" />
+                  </button>
+                </div>
+              </li>
+              <div v-if="editTabUrl === item.tabUrl" class="bg-gray-100 px-4 py-2">
+                <p v-if="isRepeatURL" class="text-red-600 text-sm pb-1">* 網址已經存在，請重新確認 !</p>
+                <input
+                  type="text"
+                  v-model="tabInfo.title"
+                  placeholder="輸入網址名稱"
+                  class="block w-full border-gray-200 text-sm border rounded-md p-1 mb-2"
+                />
+                <input
+                  type="text"
+                  v-model="tabInfo.url"
+                  placeholder="輸入網址"
+                  class="block w-full border-gray-200 text-sm border rounded-md p-1 mb-2"
+                />
+                <button @click="saveTab" class="bg-blue-100 text-blue-500 px-2 py-1 mr-2 rounded text-sm">修改</button>
+                <button @click="cancelTab" class="bg-blue-100 text-blue-500 px-2 py-1 rounded text-sm">取消</button>
+              </div>
+            </template>
+          </ul>
         </template>
-      </ul>
-      <div v-else>沒有資料</div>
-    </section>
+        <div v-else class="flex flex-col items-center justify-center h-[150px]">
+          <i-material-symbols:data-info-alert-rounded class="text-[35px] text-gray-500" />
+          <p class="text-gray-500 font-black">暫無資料</p>
+        </div>
+      </section>
+    </div>
   </main>
 </template>
+
+<style scoped lang="scss">
+.c-scrollbar-style {
+  &::-webkit-scrollbar {
+    @apply w-[6px] bg-gray-200;
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply rounded bg-blue-200;
+  }
+}
+</style>

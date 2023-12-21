@@ -10,6 +10,7 @@ declare module 'vue' {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     'IIc:outlineRemoveCircle': typeof import('~icons/ic/outline-remove-circle')['default']
     'IMaterialSymbols:addCircleRounded': typeof import('~icons/material-symbols/add-circle-rounded')['default']
+    'IMaterialSymbols:dataInfoAlertRounded': typeof import('~icons/material-symbols/data-info-alert-rounded')['default']
     'IMaterialSymbols:delete': typeof import('~icons/material-symbols/delete')['default']
     'IMaterialSymbols:editSquareRounded': typeof import('~icons/material-symbols/edit-square-rounded')['default']
   }
