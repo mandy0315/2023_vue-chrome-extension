@@ -32,7 +32,8 @@ const updateTabList = async () => {
   // test data
   // tabList.value = [
   //   {
-  //     tabTitle: '測試測試測試測試測試1',
+  //     tabTitle:
+  //       '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試1',
   //     tabUrl: 'https://www.google.com',
   //   },
   //   {
@@ -157,7 +158,7 @@ onMounted(() => {
 <template>
   <main class="w-[520px]">
     <header class="px-4 h-12 flex items-center bg-blue-300">
-      <h1 class="text-gray-50">SCRATCH URLS</h1>
+      <h1 class="text-gray-50 text-lg">SCRATCH URLS</h1>
     </header>
     <div class="h-[380px] bg-white overflow-hidden overflow-y-scroll c-scrollbar-style relative">
       <section class="relative">
@@ -167,8 +168,8 @@ onMounted(() => {
           class="rounded-b-md inline-block py-1 px-2 absolute top-0 right-2 shadow border-l border-r border-b"
           :class="editTabUrl !== '' ? 'bg-gray-100 text-gray-300' : ' bg-white text-gray-500'"
         >
-          <i-ic:outline-remove-circle v-if="isAddTab" class="inline-block" />
-          <i-material-symbols:add-circle-rounded v-else class="inline-block" />
+          <i-ic:outline-remove-circle v-if="isAddTab" class="inline-block text-base" />
+          <i-material-symbols:add-circle-rounded v-else class="inline-block text-base" />
 
           <span class="text-sm pl-1">新增網址</span>
         </button>
@@ -182,13 +183,13 @@ onMounted(() => {
               type="text"
               v-model="tabInfo.title"
               placeholder="輸入網址名稱"
-              class="block w-full border-gray-200 border rounded-md p-1 mb-2"
+              class="block text-base w-full border-gray-200 border rounded-md p-1 mb-2"
             />
             <input
               type="text"
               v-model="tabInfo.url"
               placeholder="輸入網址"
-              class="block w-full border-gray-200 border rounded-md p-1 mb-2"
+              class="block w-full text-base border-gray-200 border rounded-md p-1 mb-2"
             />
             <button @click="saveTab" class="bg-blue-100 text-blue-500 px-2 py-1 rounded text-sm">儲存</button>
           </div>
@@ -197,27 +198,31 @@ onMounted(() => {
       <section class="px-4 py-6">
         <template v-if="tabList.length > 0">
           <div>
-            <h2 class="font-black text-gray-500 pb-3 inline-block pr-2">暫存列表</h2>
+            <h2 class="text-base font-black text-gray-500 pb-3 inline-block pr-2">暫存列表</h2>
             <span class="text-gray-500 text-sm">＊限制暫存 {{ listLimit }} 列網址</span>
           </div>
 
           <ul>
             <template v-for="item in tabList" :key="item.tabTitle">
               <li class="flex border-b py-2 px-4">
-                <a
-                  :href="item.tabUrl"
-                  target="_blank"
-                  class="text-blue-500 underline underline-offset-2"
-                  :alt="item.tabUrl"
-                  >{{ item.tabTitle }}</a
-                >
+                <a data-tooltip-group :href="item.tabUrl" target="_blank" :alt="item.tabUrl" class="relative">
+                  <p class="underline text-base underline-offset-2 truncate w-[380px] text-blue-500">
+                    {{ item.tabTitle }}
+                  </p>
+                  <div
+                    data-tooltip
+                    class="absolute shadow-md top-6 z-10 truncate w-[380px] rounded left-0 bg-white px-2 py-1 text-sm text-gray-400"
+                  >
+                    {{ item.tabUrl }}
+                  </div>
+                </a>
 
                 <div class="ml-auto">
                   <button @click="editTab(item.tabTitle, item.tabUrl)" class="px-1">
-                    <i-material-symbols:edit-square-rounded class="text-gray-500" />
+                    <i-material-symbols:edit-square-rounded class="text-gray-500 text-base" />
                   </button>
                   <button class="px-1" @click="deleteTab(item.tabUrl)">
-                    <i-material-symbols:delete class="text-gray-500" />
+                    <i-material-symbols:delete class="text-gray-500 text-base" />
                   </button>
                 </div>
               </li>

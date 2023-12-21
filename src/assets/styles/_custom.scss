@@ -1,0 +1,11 @@
+[data-tooltip-group] {
+  [data-tooltip] {
+    display: none;
+  }
+
+  &:hover {
+    [data-tooltip] {
+      display: block;
+    }
+  }
+}
