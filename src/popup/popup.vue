@@ -88,6 +88,7 @@ const saveTab = async () => {
     tabTitle: tabInfo.value.title,
     tabUrl: tabInfo.value.url,
   };
+  let newTabList = [];
 
   if (editTabUrl.value === '') {
     // 新增Tab
@@ -99,8 +100,7 @@ const saveTab = async () => {
         return;
       }
     }
-
-    tabList.value.push(tab);
+    newTabList = [...tabList.value, tab];
   } else {
     // 編輯Tab
 
@@ -112,7 +112,7 @@ const saveTab = async () => {
       return;
     }
 
-    tabList.value = tabList.value.map((item: TabList[0]) => {
+    newTabList = tabList.value.map((item: TabList[0]) => {
       if (item.tabUrl === editTabUrl.value) {
         return tab;
       }
@@ -120,9 +120,14 @@ const saveTab = async () => {
     });
   }
 
-  await setStorageData({ tabList: tabList.value });
-  editTabUrl.value = '';
-  updateTabList();
+  try {
+    await setStorageData({ tabList: newTabList });
+    tabList.value = newTabList;
+    editTabUrl.value = '';
+    console.log('tab 儲存成功');
+  } catch (err) {
+    console.log('tab 儲存失敗');
+  }
 };
 const deleteTab = async (currUrl: string) => {
   tabList.value = tabList.value.filter((item: TabList[0]) => item.tabUrl !== currUrl);
