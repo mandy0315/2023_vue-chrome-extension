@@ -15,6 +15,7 @@ declare module 'vue' {
     'IMaterialSymbols:delete': typeof import('~icons/material-symbols/delete')['default']
     'IMaterialSymbols:editSquareRounded': typeof import('~icons/material-symbols/edit-square-rounded')['default']
     'IMaterialSymbols:nightsStayRounded': typeof import('~icons/material-symbols/nights-stay-rounded')['default']
+    'IMaterialSymbols:settingsRounded': typeof import('~icons/material-symbols/settings-rounded')['default']
     'IMaterialSymbols:wbSunnyRounded': typeof import('~icons/material-symbols/wb-sunny-rounded')['default']
     'ITeenyicons:tickCircleSolid': typeof import('~icons/teenyicons/tick-circle-solid')['default']
   }

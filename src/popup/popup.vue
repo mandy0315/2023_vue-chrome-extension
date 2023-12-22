@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getCurrentTab, setStorageData, getStorageData } from '@/utils/useChromeAPI';
+import { getCurrentTab, setStorageData, getStorageData, openOptions } from '@/utils/useChromeAPI';
 import { computed, onMounted, ref } from 'vue';
 import useNotify from '@/composables/useNotify';
 
@@ -167,9 +167,12 @@ onMounted(() => {
   <main class="w-[520px]" :class="{ dark: isDarkMode }">
     <header class="px-4 h-12 flex items-center bg-blue-300 dark:bg-gray-600">
       <h1 class="text-gray-50 text-lg font-bold">SCRATCH URLS</h1>
-      <button class="ml-auto text-white text-[20px]" @click="isDarkMode = !isDarkMode">
+      <button class="ml-auto text-white px-2" @click="isDarkMode = !isDarkMode">
         <i-material-symbols:wb-sunny-rounded v-if="isDarkMode" class="text-white text-[20px]" />
         <i-material-symbols:nights-stay-rounded v-else class="text-white text-[18px]" />
+      </button>
+      <button @click="openOptions" class="px-2">
+        <i-material-symbols:settings-rounded class="text-white text-[18px]" />
       </button>
     </header>
     <div

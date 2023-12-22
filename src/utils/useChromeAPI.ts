@@ -26,3 +26,7 @@ export const getStorageData = async (key: string) => {
     console.log('取得資料失敗');
   }
 };
+
+export const openOptions = () => {
+  chrome.runtime.openOptionsPage();
+};
