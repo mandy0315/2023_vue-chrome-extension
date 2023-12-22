@@ -1,4 +1,5 @@
 import { TabList } from '@/types/popup';
+import { SetStorageData } from '@/types/useChromeAPI';
 
 export const getCurrentTab = async () => {
   const queryOptions = { active: true, lastFocusedWindow: true };
@@ -6,7 +7,7 @@ export const getCurrentTab = async () => {
   return tab;
 };
 
-export const setStorageData = async (obj: { [key in string]: string | TabList }): Promise<boolean> => {
+export const setStorageData = async (obj: SetStorageData): Promise<boolean> => {
   return new Promise((resolve, reject) => {
     chrome.storage.sync.set(obj, () => {
       if (chrome.runtime.lastError) {

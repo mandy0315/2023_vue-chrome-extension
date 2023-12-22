@@ -76,6 +76,14 @@ const updateTabList = async () => {
   //   },
   // ];
 };
+const updatelistLimit = async () => {
+  const storagelistLimit = await getStorageData('listLimit');
+  listLimit.value = storagelistLimit;
+  if (tabList.value.length > listLimit.value) {
+    tabList.value = tabList.value.slice(0, listLimit.value);
+    await setStorageData({ tabList: tabList.value });
+  }
+};
 
 const toggleAddTab = () => {
   isAddTab.value = !isAddTab.value;
@@ -157,10 +165,9 @@ const cancelTab = () => {
   tabInfo.value.url = '';
 };
 
-onMounted(() => {
-  updateCurrTabInfo();
-  updateTabList();
-});
+updateCurrTabInfo();
+updateTabList();
+updatelistLimit();
 </script>
 
 <template>
