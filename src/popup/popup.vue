@@ -16,7 +16,7 @@ const editTabUrl = ref('');
 const listLimit = ref(10);
 
 const isListOverLimit = computed(() => {
-  return tabList.value.length > listLimit.value;
+  return tabList.value.length >= listLimit.value;
 });
 
 const updateCurrTabInfo = async () => {
@@ -69,10 +69,10 @@ const updateTabList = async () => {
   //     tabTitle: '測試測試測試測試測試9',
   //     tabUrl: 'http://www.chinasgp.cn/article/2831.html',
   //   },
-  // {
-  //   tabTitle: '測試測試測試測試測試10',
-  //   tabUrl: 'http://www.chinasgp.cn/article/2832.html',
-  // },
+  //   {
+  //     tabTitle: '測試測試測試測試測試10',
+  //     tabUrl: 'http://www.chinasgp.cn/article/2832.html',
+  //   },
   // ];
 };
 
@@ -201,17 +201,25 @@ onMounted(() => {
               type="text"
               v-model="tabInfo.title"
               placeholder="輸入網址名稱"
+              :disabled="isListOverLimit"
               class="block text-base w-full border-gray-200 border rounded-md p-1 mb-2 dark:text-gray-100 dark:bg-gray-600 dark:border-gray-400"
             />
             <input
               type="text"
               v-model="tabInfo.url"
               placeholder="輸入網址"
+              :disabled="isListOverLimit"
               class="block w-full text-base border-gray-200 border rounded-md p-1 mb-2 dark:text-gray-100 dark:bg-gray-600 dark:border-gray-400"
             />
             <button
               @click="saveTab"
-              class="bg-blue-100 text-blue-500 dark:bg-gray-600 dark:text-white px-2 py-1 rounded text-sm"
+              :disabled="isListOverLimit"
+              class="px-2 py-1 rounded text-sm"
+              :class="
+                isListOverLimit
+                  ? 'cursor-not-allowed bg-gray-200 text-gray-400 dark:bg-gray-600 dark:text-gray-400'
+                  : 'bg-blue-100 text-blue-500 dark:bg-gray-600 dark:text-white'
+              "
             >
               儲存
             </button>
