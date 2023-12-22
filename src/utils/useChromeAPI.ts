@@ -6,18 +6,21 @@ export const getCurrentTab = async () => {
   return tab;
 };
 
-export const setStorageData = async (obj: { [key in string]: string | TabList }) => {
-  try {
-    await chrome.storage.local.set(obj);
-    console.log('存取資料成功');
-  } catch (e) {
-    console.log('存取資料失敗');
-  }
+export const setStorageData = async (obj: { [key in string]: string | TabList }): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.set(obj, () => {
+      if (chrome.runtime.lastError) {
+        reject(false); // 表示失敗
+      } else {
+        resolve(true); // 表示成功
+      }
+    });
+  });
 };
 
 export const getStorageData = async (key: string) => {
   try {
-    const data = await chrome.storage.local.get(key);
+    const data = await chrome.storage.sync.get([key]);
     return data[key];
   } catch (e) {
     console.log('取得資料失敗');

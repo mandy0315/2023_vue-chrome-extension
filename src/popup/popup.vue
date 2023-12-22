@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { getCurrentTab, setStorageData, getStorageData } from '@/utils/useChromeAPI';
 import { computed, onMounted, ref } from 'vue';
+import useNotify from '@/composables/useNotify';
 
 import { TabList } from '@/types/popup';
 
@@ -82,12 +83,13 @@ const toggleAddTab = () => {
     updateCurrTabInfo();
   }
 };
-
+const { isShowNotify, notifyMsg, showNotify } = useNotify();
 const saveTab = async () => {
   const tab = {
     tabTitle: tabInfo.value.title,
     tabUrl: tabInfo.value.url,
   };
+
   let newTabList = [];
 
   if (editTabUrl.value === '') {
@@ -123,8 +125,10 @@ const saveTab = async () => {
   try {
     await setStorageData({ tabList: newTabList });
     tabList.value = newTabList;
+    showNotify({
+      message: `${editTabUrl.value === '' ? '新增' : '修改'}成功`,
+    });
     editTabUrl.value = '';
-    console.log('tab 儲存成功');
   } catch (err) {
     console.log('tab 儲存失敗');
   }
@@ -310,6 +314,7 @@ onMounted(() => {
         - 暫存網址套件
       </footer>
     </div>
+    <global-notify v-if="isShowNotify" :notify-msg="notifyMsg" />
   </main>
 </template>
 

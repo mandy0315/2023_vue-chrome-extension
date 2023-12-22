@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    GlobalNotify: typeof import('./src/components/globalNotify.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     'IIc:outlineRemoveCircle': typeof import('~icons/ic/outline-remove-circle')['default']
     'IMaterialSymbols:addCircleRounded': typeof import('~icons/material-symbols/add-circle-rounded')['default']
@@ -15,5 +16,6 @@ declare module 'vue' {
     'IMaterialSymbols:editSquareRounded': typeof import('~icons/material-symbols/edit-square-rounded')['default']
     'IMaterialSymbols:nightsStayRounded': typeof import('~icons/material-symbols/nights-stay-rounded')['default']
     'IMaterialSymbols:wbSunnyRounded': typeof import('~icons/material-symbols/wb-sunny-rounded')['default']
+    'ITeenyicons:tickCircleSolid': typeof import('~icons/teenyicons/tick-circle-solid')['default']
   }
 }
