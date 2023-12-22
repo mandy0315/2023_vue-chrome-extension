@@ -69,10 +69,10 @@ const updateTabList = async () => {
   //     tabTitle: '測試測試測試測試測試9',
   //     tabUrl: 'http://www.chinasgp.cn/article/2831.html',
   //   },
-  //   {
-  //     tabTitle: '測試測試測試測試測試10',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2832.html',
-  //   },
+  // {
+  //   tabTitle: '測試測試測試測試測試10',
+  //   tabUrl: 'http://www.chinasgp.cn/article/2832.html',
+  // },
   // ];
 };
 
@@ -89,41 +89,39 @@ const saveTab = async () => {
     tabUrl: tabInfo.value.url,
   };
 
-  const checkIsRepeatURL = () => {
-    isRepeatURL.value = false;
-
-    const findUrl = tabList.value.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
-    if (findUrl) {
-      isRepeatURL.value = true;
-    }
-  };
-
   if (editTabUrl.value === '') {
     // 新增Tab
+    // - 檢查是否有重複網址
     if (tabList.value.length > 0) {
-      checkIsRepeatURL();
-      if (isRepeatURL.value) return;
-      tabList.value.push(tab);
-      await setStorageData({ tabList: tabList.value });
-    } else {
-      await setStorageData({ tabList: [tab] });
+      const findUrl = tabList.value.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
+      if (findUrl) {
+        isRepeatURL.value = true;
+        return;
+      }
     }
+
+    tabList.value.push(tab);
   } else {
     // 編輯Tab
+
+    // - 檢查是否有重複網址
+    const filterTabList = tabList.value.filter(item => item.tabUrl !== editTabUrl.value);
+    const findUrl = filterTabList.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
+    if (findUrl) {
+      isRepeatURL.value = true;
+      return;
+    }
+
     tabList.value = tabList.value.map((item: TabList[0]) => {
       if (item.tabUrl === editTabUrl.value) {
-        checkIsRepeatURL();
-        return isRepeatURL.value ? item : tab;
+        return tab;
       }
       return item;
     });
-
-    if (!isRepeatURL.value) {
-      editTabUrl.value = '';
-      await setStorageData({ tabList: tabList.value });
-    }
   }
 
+  await setStorageData({ tabList: tabList.value });
+  editTabUrl.value = '';
   updateTabList();
 };
 const deleteTab = async (currUrl: string) => {
