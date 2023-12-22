@@ -248,8 +248,9 @@ updatelistLimit();
           </div>
 
           <ul>
-            <template v-for="item in tabList" :key="item.tabTitle">
-              <li class="flex border-b py-2 px-4 dark:border-gray-600">
+            <template v-for="(item, index) in tabList" :key="item.tabTitle">
+              <li class="flex border-b py-2 pr-4 dark:border-gray-600">
+                <span class="text-sm pr-2 w-6 text-right text-gray-500 dark:text-gray-100">{{ index + 1 }}</span>
                 <a
                   data-tooltip-group
                   :href="item.tabUrl"
