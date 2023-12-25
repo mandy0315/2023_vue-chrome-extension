@@ -144,6 +144,15 @@ const saveTab = async () => {
     console.log('tab 儲存失敗');
   }
 };
+const deleteAllTabs = async () => {
+  try {
+    tabList.value = [];
+    await setStorageData({ tabList: tabList.value });
+    setBadge();
+  } catch (err) {
+    console.log('tab 刪除失敗');
+  }
+};
 const deleteTab = async (currUrl: string) => {
   tabList.value = tabList.value.filter((item: TabList[0]) => item.tabUrl !== currUrl);
   try {
@@ -250,9 +259,12 @@ updatelistLimit();
       </section>
       <section class="px-4 py-6">
         <template v-if="tabList.length > 0">
-          <div>
-            <h2 class="text-base font-black text-gray-500 pb-3 inline-block pr-2 dark:text-gray-100">暫存列表</h2>
+          <div class="flex items-center pb-2">
+            <h2 class="text-base font-black text-gray-500 pr-2 dark:text-gray-100">暫存列表</h2>
             <span class="text-gray-500 text-sm dark:text-gray-100">＊限制暫存 {{ listLimit }} 列網址</span>
+            <button class="bg-red-100 text-red-500 px-2 py-1 rounded text-sm ml-auto" @click="deleteAllTabs">
+              全部刪除
+            </button>
           </div>
 
           <ul>
