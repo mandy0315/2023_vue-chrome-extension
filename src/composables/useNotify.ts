@@ -1,14 +1,15 @@
 import { ref } from 'vue';
+
 export default () => {
   const isShowNotify = ref(false);
   const notifyMsg = ref('');
 
-  interface NotifyOptions {
+  interface SetNotify {
     message: string;
     duration?: number;
   }
 
-  const showNotify = ({ message, duration = 2000 }: NotifyOptions) => {
+  const setNotify = ({ message, duration = 2000 }: SetNotify) => {
     isShowNotify.value = true;
     notifyMsg.value = message;
     setTimeout(() => {
@@ -19,6 +20,6 @@ export default () => {
   return {
     isShowNotify,
     notifyMsg,
-    showNotify,
+    setNotify,
   };
 };

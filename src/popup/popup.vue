@@ -91,7 +91,9 @@ const toggleAddTab = () => {
     updateCurrTabInfo();
   }
 };
-const { isShowNotify, notifyMsg, showNotify } = useNotify();
+
+const { isShowNotify, notifyMsg, setNotify } = useNotify();
+
 const saveTab = async () => {
   const tab = {
     tabTitle: tabInfo.value.title,
@@ -133,7 +135,7 @@ const saveTab = async () => {
   try {
     await setStorageData({ tabList: newTabList });
     tabList.value = newTabList;
-    showNotify({
+    setNotify({
       message: `${editTabUrl.value === '' ? '新增' : '修改'}成功`,
     });
     setBadge();
@@ -144,8 +146,12 @@ const saveTab = async () => {
 };
 const deleteTab = async (currUrl: string) => {
   tabList.value = tabList.value.filter((item: TabList[0]) => item.tabUrl !== currUrl);
-  await setStorageData({ tabList: tabList.value });
-  setBadge();
+  try {
+    await setStorageData({ tabList: tabList.value });
+    setBadge();
+  } catch (err) {
+    console.log('tab 刪除失敗');
+  }
 };
 const editTab = (currTitle: string, currUrl: string) => {
   isAddTab.value = false;
@@ -173,7 +179,7 @@ updatelistLimit();
 </script>
 
 <template>
-  <main class="w-[520px]" :class="{ dark: isDarkMode }">
+  <main class="w-[520px] relative" :class="{ dark: isDarkMode }">
     <header class="px-4 h-12 flex items-center bg-blue-300 dark:bg-gray-600">
       <h1 class="text-gray-50 text-lg font-bold">SCRATCH URLS</h1>
       <button class="ml-auto text-white px-2" @click="isDarkMode = !isDarkMode">
@@ -327,6 +333,7 @@ updatelistLimit();
         - 暫存網址套件
       </footer>
     </div>
+
     <global-notify v-if="isShowNotify" :notify-msg="notifyMsg" />
   </main>
 </template>
