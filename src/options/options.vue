@@ -1,22 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import { getStorageData, setStorageData } from '@/utils/useChromeAPI';
+import { getStorageData, setStorageData, setBadge } from '@/utils/useChromeAPI';
 
 const listLimit = ref(0);
-const isShowIconCount = ref(false);
+const isShowBadgeCount = ref(false);
 
 const updateOptions = async () => {
   const storageListLimit = await getStorageData('listLimit');
-  const storageIsShowIconCount = await getStorageData('isShowIconCount');
+  const storageIsShowBadgeCount = await getStorageData('isShowBadgeCount');
   listLimit.value = storageListLimit;
-  isShowIconCount.value = storageIsShowIconCount;
+  isShowBadgeCount.value = storageIsShowBadgeCount;
 };
 const saveOptions = async () => {
   try {
     await setStorageData({
       listLimit: listLimit.value,
-      isShowIconCount: isShowIconCount.value,
+      isShowBadgeCount: isShowBadgeCount.value,
     });
+    setBadge();
     console.log('Options 儲存成功');
   } catch (e) {
     console.log('Options 儲存失敗');
@@ -29,7 +30,7 @@ updateOptions();
   <main class="mx-auto max-w-[520px] p-6 relative">
     <div class="text-gray-800 pb-2">
       <label>
-        <input v-model="isShowIconCount" type="checkbox" />
+        <input v-model="isShowBadgeCount" type="checkbox" />
         <span class="pl-2">在圖型顯示列表數量</span>
       </label>
     </div>

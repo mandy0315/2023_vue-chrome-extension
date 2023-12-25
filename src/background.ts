@@ -1,9 +1,13 @@
-import { setStorageData } from '@/utils/useChromeAPI';
+import { setStorageData, setBadge } from '@/utils/useChromeAPI';
+
+/** event */
+
 // 初始狀態監聽
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('onInstalled...');
   await setStorageData({
     listLimit: 10,
-    isShowIconCount: true,
+    isShowBadgeCount: true,
   });
+  setBadge();
 });

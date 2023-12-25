@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { getCurrentTab, setStorageData, getStorageData, openOptions } from '@/utils/useChromeAPI';
-import { computed, onMounted, ref } from 'vue';
+import { getCurrentTab, setStorageData, getStorageData, openOptions, setBadge } from '@/utils/useChromeAPI';
+import { computed, ref } from 'vue';
 import useNotify from '@/composables/useNotify';
 
 import { TabList } from '@/types/popup';
@@ -136,6 +136,7 @@ const saveTab = async () => {
     showNotify({
       message: `${editTabUrl.value === '' ? '新增' : '修改'}成功`,
     });
+    setBadge();
     editTabUrl.value = '';
   } catch (err) {
     console.log('tab 儲存失敗');
@@ -144,6 +145,7 @@ const saveTab = async () => {
 const deleteTab = async (currUrl: string) => {
   tabList.value = tabList.value.filter((item: TabList[0]) => item.tabUrl !== currUrl);
   await setStorageData({ tabList: tabList.value });
+  setBadge();
 };
 const editTab = (currTitle: string, currUrl: string) => {
   isAddTab.value = false;

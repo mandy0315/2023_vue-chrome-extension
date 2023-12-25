@@ -31,3 +31,17 @@ export const getStorageData = async (key: string) => {
 export const openOptions = () => {
   chrome.runtime.openOptionsPage();
 };
+
+export const setBadge = async () => {
+  const isShowBadgeCount = await getStorageData('isShowBadgeCount');
+  const tabList = await getStorageData('tabList');
+  const tabListLen = Object.values(tabList).length || 0;
+
+  if (isShowBadgeCount) {
+    chrome.action.setBadgeText({ text: `${tabListLen}` });
+    chrome.action.setBadgeBackgroundColor({ color: '#dbeafe' });
+    chrome.action.setBadgeTextColor({ color: '#3b82f6' });
+  } else {
+    chrome.action.setBadgeText({ text: '' });
+  }
+};
