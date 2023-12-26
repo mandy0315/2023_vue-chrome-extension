@@ -1,4 +1,4 @@
-import { SetStorageData, AlarmsOptions } from '@/types/useChromeAPI';
+import { StorageDataOptions, AlarmsOptions } from '@/types/useChromeAPI';
 
 export const getCurrentTab = async () => {
   const queryOptions = { active: true, lastFocusedWindow: true };
@@ -6,9 +6,9 @@ export const getCurrentTab = async () => {
   return tab;
 };
 
-export const setStorageData = async (obj: SetStorageData): Promise<boolean> => {
+export const setStorageData = async (options: StorageDataOptions): Promise<boolean> => {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.set(obj, () => {
+    chrome.storage.sync.set(options, () => {
       if (chrome.runtime.lastError) {
         reject(false); // 表示失敗
       } else {
