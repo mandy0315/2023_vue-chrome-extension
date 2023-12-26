@@ -1,5 +1,4 @@
-import { TabList } from '@/types/popup';
-import { SetStorageData } from '@/types/useChromeAPI';
+import { SetStorageData, AlarmsOptions } from '@/types/useChromeAPI';
 
 export const getCurrentTab = async () => {
   const queryOptions = { active: true, lastFocusedWindow: true };
@@ -43,5 +42,13 @@ export const setBadge = async () => {
     chrome.action.setBadgeTextColor({ color: '#3b82f6' });
   } else {
     chrome.action.setBadgeText({ text: '' });
+  }
+};
+
+export const createAlarms = async (name: string, options: Partial<AlarmsOptions>) => {
+  try {
+    await chrome.alarms.create(name, options);
+  } catch (e) {
+    console.log('建立鬧鐘失敗');
   }
 };
