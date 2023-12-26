@@ -271,7 +271,7 @@ updatelistLimit();
           </div>
         </div>
       </section>
-      <section class="px-4 py-10">
+      <section class="px-4 pt-10 pb-4">
         <template v-if="tabList.length > 0">
           <div class="flex items-center pb-2">
             <h2 class="text-base font-black text-gray-500 pr-2 dark:text-gray-100">暫存列表</h2>
@@ -348,18 +348,18 @@ updatelistLimit();
         </template>
         <div v-else class="flex flex-col items-center justify-center h-[120px]">
           <i-material-symbols:data-info-alert-rounded class="text-[35px] text-gray-500" />
-          <p class="text-gray-500 font-black">暫無資料</p>
+          <p class="text-gray-500 font-black text-base">暫無資料</p>
         </div>
       </section>
       <footer class="text-xs mt-auto text-gray-400 bg-blue-50 text-center py-1 dark:bg-gray-800">
-        2023@ 我是一隻<a
-          href="https://github.com/mandy0315?tab=repositories"
+        2023@ 我是一隻小敏蟲 -
+        <a
+          href="https://github.com/mandy0315/chrome_extension_vue"
           class="underline underline-offset-2"
           target="_blank"
           rel="noreferrer noopener"
-          >小敏蟲</a
+          >暫存網址套件</a
         >
-        - 暫存網址套件
       </footer>
     </div>
     <global-notify v-if="isShowNotify" :message="notifyContent" />
