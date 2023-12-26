@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { getCurrentTab, setStorageData, getStorageData, openOptions, setBadge } from '@/utils/useChromeAPI';
 import { computed, ref } from 'vue';
 import useNotify from '@/composables/useNotify';
 import { useConfirmDialog } from '@/composables/useDialog';
+import { getCurrentTab, setStorageData, getStorageData, openOptions, setBadge } from '@/utils/useChromeAPI';
+import { dateFormat } from '@/utils/useDayTime';
 
 import { TabList } from '@/types/popup';
 
@@ -35,45 +36,55 @@ const updateTabList = async () => {
   // test data
   // tabList.value = [
   //   {
-  //     tabTitle:
+  //     title:
   //       '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試1',
-  //     tabUrl: 'https://www.google.com',
+  //     url: 'https://www.google.com',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試2',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2824.html',
+  //     title: '測試測試測試測試測試2',
+  //     url: 'http://www.chinasgp.cn/article/2824.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試3',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2825.html',
+  //     title: '測試測試測試測試測試3',
+  //     url: 'http://www.chinasgp.cn/article/2825.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試4',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2826.html',
+  //     title: '測試測試測試測試測試4',
+  //     url: 'http://www.chinasgp.cn/article/2826.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試5',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2827.html',
+  //     title: '測試測試測試測試測試5',
+  //     url: 'http://www.chinasgp.cn/article/2827.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試6',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2828.html',
+  //     title: '測試測試測試測試測試6',
+  //     url: 'http://www.chinasgp.cn/article/2828.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試7',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2829.html',
+  //     title: '測試測試測試測試測試7',
+  //     url: 'http://www.chinasgp.cn/article/2829.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試8',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2830.html',
+  //     title: '測試測試測試測試測試8',
+  //     url: 'http://www.chinasgp.cn/article/2830.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試9',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2831.html',
+  //     title: '測試測試測試測試測試9',
+  //     url: 'http://www.chinasgp.cn/article/2831.html',
+  //     updateDate: '2023/12/26',
   //   },
   //   {
-  //     tabTitle: '測試測試測試測試測試10',
-  //     tabUrl: 'http://www.chinasgp.cn/article/2832.html',
+  //     title: '測試測試測試測試測試10',
+  //     url: 'http://www.chinasgp.cn/article/2832.html',
+  //     updateDate: '2023/12/26',
   //   },
   // ];
 };
@@ -97,9 +108,10 @@ const { isShowNotify, notifyContent, setNotify } = useNotify();
 const { isShowDialog, setConfirmDialog, dialogContent } = useConfirmDialog();
 
 const saveTab = async () => {
-  const tab = {
-    tabTitle: tabInfo.value.title,
-    tabUrl: tabInfo.value.url,
+  const newTab = {
+    title: tabInfo.value.title,
+    url: tabInfo.value.url,
+    updateDate: dateFormat(new Date()),
   };
 
   let newTabList = [];
@@ -108,29 +120,29 @@ const saveTab = async () => {
     // 新增Tab
     // - 檢查是否有重複網址
     if (tabList.value.length > 0) {
-      const findUrl = tabList.value.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
+      const findUrl = tabList.value.find((tab: TabList[0]) => tab.url === newTab.url);
       if (findUrl) {
         isRepeatURL.value = true;
         return;
       }
     }
-    newTabList = [...tabList.value, tab];
+    newTabList = [...tabList.value, newTab];
   } else {
     // 編輯Tab
 
     // - 檢查是否有重複網址
-    const filterTabList = tabList.value.filter(item => item.tabUrl !== editTabUrl.value);
-    const findUrl = filterTabList.find((item: TabList[0]) => item.tabUrl === tab.tabUrl);
+    const filterTabList = tabList.value.filter(tab => tab.url !== editTabUrl.value);
+    const findUrl = filterTabList.find((tab: TabList[0]) => tab.url === newTab.url);
     if (findUrl) {
       isRepeatURL.value = true;
       return;
     }
 
-    newTabList = tabList.value.map((item: TabList[0]) => {
-      if (item.tabUrl === editTabUrl.value) {
-        return tab;
+    newTabList = tabList.value.map((tab: TabList[0]) => {
+      if (tab.url === editTabUrl.value) {
+        return newTab;
       }
-      return item;
+      return tab;
     });
   }
 
@@ -147,7 +159,7 @@ const saveTab = async () => {
   }
 };
 const deleteTab = async (currUrl: string) => {
-  tabList.value = tabList.value.filter((item: TabList[0]) => item.tabUrl !== currUrl);
+  tabList.value = tabList.value.filter((tab: TabList[0]) => tab.url !== currUrl);
   try {
     await setStorageData({ tabList: tabList.value });
     setBadge();
@@ -285,38 +297,45 @@ updatelistLimit();
           </div>
 
           <ul>
-            <template v-for="(item, index) in tabList" :key="item.tabTitle">
+            <template v-for="(tab, index) in tabList" :key="tab.title">
               <li class="flex border-b py-2 pr-4 dark:border-gray-600">
                 <span class="text-sm pr-2 w-6 text-right text-gray-500 dark:text-gray-100">{{ index + 1 }}</span>
-                <a
-                  data-tooltip-group
-                  :href="item.tabUrl"
-                  target="_blank"
-                  :alt="item.tabUrl"
-                  rel="noreferrer noopener"
-                  class="relative"
-                >
-                  <p class="underline text-base underline-offset-2 truncate w-[380px] text-blue-500 dark:text-gray-100">
-                    {{ item.tabTitle }}
+                <div>
+                  <p class="text-xs text-gray-500 dark:text-gray-100">
+                    {{ tab.updateDate }}
                   </p>
-                  <div
-                    data-tooltip
-                    class="absolute shadow-md top-6 z-10 truncate w-[380px] rounded left-0 bg-white px-2 py-1 text-sm text-gray-400 dark:bg-gray-800"
+                  <a
+                    data-tooltip-group
+                    :href="tab.url"
+                    target="_blank"
+                    :alt="tab.url"
+                    rel="noreferrer noopener"
+                    class="relative"
                   >
-                    {{ item.tabUrl }}
-                  </div>
-                </a>
+                    <p
+                      class="underline text-base underline-offset-2 truncate w-[380px] text-blue-500 dark:text-gray-100"
+                    >
+                      {{ tab.title }}
+                    </p>
+                    <div
+                      data-tooltip
+                      class="absolute shadow-md top-6 z-10 truncate w-[380px] rounded left-0 bg-white px-2 py-1 text-sm text-gray-400 dark:bg-gray-800"
+                    >
+                      {{ tab.url }}
+                    </div>
+                  </a>
+                </div>
 
-                <div class="ml-auto">
-                  <button @click="editTab(item.tabTitle, item.tabUrl)" class="px-1">
+                <div class="ml-auto flex items-center">
+                  <button @click="editTab(tab.title, tab.url)" class="px-1">
                     <i-material-symbols:edit-square-rounded class="text-gray-500 text-base dark:text-gray-100" />
                   </button>
-                  <button class="px-1" @click="deleteTab(item.tabUrl)">
+                  <button class="px-1" @click="deleteTab(tab.url)">
                     <i-material-symbols:delete class="text-gray-500 text-base dark:text-gray-100" />
                   </button>
                 </div>
               </li>
-              <div v-if="editTabUrl === item.tabUrl" class="bg-gray-100 px-4 py-2 dark:bg-gray-800">
+              <div v-if="editTabUrl === tab.url" class="bg-gray-100 px-4 py-2 dark:bg-gray-800">
                 <p v-if="isRepeatURL" class="text-red-600 text-sm pb-1">* 網址已經存在，請重新確認 !</p>
                 <input
                   type="text"

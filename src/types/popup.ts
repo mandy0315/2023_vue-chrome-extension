@@ -1,4 +1,5 @@
 export type TabList = {
-  tabTitle: string;
-  tabUrl: string;
+  title: string;
+  url: string;
+  updateDate: string;
 }[];
