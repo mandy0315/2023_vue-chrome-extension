@@ -2,6 +2,7 @@
 import { getCurrentTab, setStorageData, getStorageData, openOptions, setBadge } from '@/utils/useChromeAPI';
 import { computed, ref } from 'vue';
 import useNotify from '@/composables/useNotify';
+import { useConfirmDialog } from '@/composables/useDialog';
 
 import { TabList } from '@/types/popup';
 
@@ -93,6 +94,7 @@ const toggleAddTab = () => {
 };
 
 const { isShowNotify, notifyMsg, setNotify } = useNotify();
+const { isShowDialog, setConfirmDialog, dialogContent } = useConfirmDialog();
 
 const saveTab = async () => {
   const tab = {
@@ -144,15 +146,6 @@ const saveTab = async () => {
     console.log('tab 儲存失敗');
   }
 };
-const deleteAllTabs = async () => {
-  try {
-    tabList.value = [];
-    await setStorageData({ tabList: tabList.value });
-    setBadge();
-  } catch (err) {
-    console.log('tab 刪除失敗');
-  }
-};
 const deleteTab = async (currUrl: string) => {
   tabList.value = tabList.value.filter((item: TabList[0]) => item.tabUrl !== currUrl);
   try {
@@ -180,6 +173,27 @@ const cancelTab = () => {
   editTabUrl.value = '';
   tabInfo.value.title = '';
   tabInfo.value.url = '';
+};
+const deleteAllDialog = async () => {
+  const deleteAllTabs = async () => {
+    try {
+      await setStorageData({ tabList: [] });
+      tabList.value = [];
+      setBadge();
+    } catch (err) {
+      console.log('刪除失敗');
+    }
+  };
+
+  try {
+    await setConfirmDialog({
+      title: '刪除全部列表',
+      message: '刪除全部列表後將無法復原，您確定要刪除嗎？',
+    });
+    deleteAllTabs();
+  } catch (err) {
+    console.log('cancel');
+  }
 };
 
 updateCurrTabInfo();
@@ -257,12 +271,15 @@ updatelistLimit();
           </div>
         </div>
       </section>
-      <section class="px-4 py-6">
+      <section class="px-4 py-10">
         <template v-if="tabList.length > 0">
           <div class="flex items-center pb-2">
             <h2 class="text-base font-black text-gray-500 pr-2 dark:text-gray-100">暫存列表</h2>
             <span class="text-gray-500 text-sm dark:text-gray-100">＊限制暫存 {{ listLimit }} 列網址</span>
-            <button class="bg-red-100 text-red-500 px-2 py-1 rounded text-sm ml-auto" @click="deleteAllTabs">
+            <button
+              @click="deleteAllDialog"
+              class="px-2 py-1 rounded text-sm ml-auto bg-red-100 text-red-500 dark:bg-gray-600 dark:text-white"
+            >
               全部刪除
             </button>
           </div>
@@ -347,6 +364,7 @@ updatelistLimit();
     </div>
 
     <global-notify v-if="isShowNotify" :notify-msg="notifyMsg" />
+    <global-dialog v-if="isShowDialog" :title="dialogContent.title" :message="dialogContent.message" />
   </main>
 </template>
 
