@@ -1,4 +1,6 @@
-import { setStorageData, setBadge, createAlarms } from '@/utils/useChromeAPI';
+import { setStorageData, setBadge, createAlarms, getStorageData } from '@/utils/useChromeAPI';
+import { TabList } from '@/types/popup';
+import { dateDiff, dateFormat } from '@/utils/useDayTime';
 
 /** event */
 
@@ -6,6 +8,7 @@ import { setStorageData, setBadge, createAlarms } from '@/utils/useChromeAPI';
 chrome.runtime.onInstalled.addListener(async () => {
   console.log('onInstalled...');
   await setStorageData({
+    tabsDeleteDays: 7,
     listLimit: 10,
     isShowBadgeCount: true,
   });
@@ -27,8 +30,8 @@ const getTimeUntilUpdate = () => {
     now.getFullYear(),
     now.getMonth(),
     now.getDate(),
-    15, // 時
-    20, // 分
+    23, // 時
+    0, // 分
     0, // 秒
   );
 
@@ -44,12 +47,27 @@ const getTimeUntilUpdate = () => {
 const setDailyUpdateAlarm = async () => {
   const timeUntilUpdate = getTimeUntilUpdate();
 
-  /** 建立鬧鐘 */
+  /** 建立每日鬧鐘 */
   createAlarms('expirationTabs', {
     when: Date.now() + timeUntilUpdate,
     periodInMinutes: 24 * 60,
   });
 };
-const updateExpirationTabs = () => {
-  console.log('updateExpirationTabs...');
+const updateExpirationTabs = async () => {
+  const storageTabsDeleteDays = await getStorageData('tabsDeleteDays');
+  const storageTabList = await getStorageData('tabList');
+  const tabList: Array<TabList[0]> = Object.values(storageTabList) || [];
+  if (tabList.length === 0) return;
+
+  const newTabList = tabList.filter((tab: TabList[0]) => {
+    const nowDate = dateFormat(new Date());
+    const tabDate = tab.updateDate;
+    const diffDays = dateDiff(nowDate, tabDate, 'day');
+
+    return diffDays <= storageTabsDeleteDays;
+  });
+
+  await setStorageData({
+    tabList: newTabList,
+  });
 };
