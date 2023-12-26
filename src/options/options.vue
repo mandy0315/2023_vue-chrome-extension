@@ -13,7 +13,7 @@ const updateOptions = async () => {
   isShowBadgeCount.value = storageIsShowBadgeCount;
 };
 
-const { isShowNotify, notifyMsg, setNotify } = useNotify();
+const { isShowNotify, notifyContent, setNotify } = useNotify();
 const saveOptions = async () => {
   try {
     await setStorageData({
@@ -58,6 +58,6 @@ updateOptions();
     </div>
     <button @click="saveOptions" class="px-2 py-1 rounded text-sm bg-blue-100 text-blue-500">儲存</button>
 
-    <global-notify v-if="isShowNotify" :notify-msg="notifyMsg" />
+    <global-notify v-if="isShowNotify" :message="notifyContent" />
   </main>
 </template>
