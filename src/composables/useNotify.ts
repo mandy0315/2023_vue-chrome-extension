@@ -2,7 +2,7 @@ import { ref } from 'vue';
 
 export default () => {
   const isShowNotify = ref(false);
-  const notifyMsg = ref('');
+  const notifyContent = ref('');
 
   interface SetNotify {
     message: string;
@@ -11,15 +11,16 @@ export default () => {
 
   const setNotify = ({ message, duration = 2000 }: SetNotify) => {
     isShowNotify.value = true;
-    notifyMsg.value = message;
+    notifyContent.value = message;
     setTimeout(() => {
       isShowNotify.value = false;
+      notifyContent.value = '';
     }, duration);
   };
 
   return {
     isShowNotify,
-    notifyMsg,
+    notifyContent,
     setNotify,
   };
 };

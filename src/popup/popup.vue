@@ -93,7 +93,7 @@ const toggleAddTab = () => {
   }
 };
 
-const { isShowNotify, notifyMsg, setNotify } = useNotify();
+const { isShowNotify, notifyContent, setNotify } = useNotify();
 const { isShowDialog, setConfirmDialog, dialogContent } = useConfirmDialog();
 
 const saveTab = async () => {
@@ -362,8 +362,7 @@ updatelistLimit();
         - 暫存網址套件
       </footer>
     </div>
-
-    <global-notify v-if="isShowNotify" :notify-msg="notifyMsg" />
+    <global-notify v-if="isShowNotify" :message="notifyContent" />
     <global-dialog v-if="isShowDialog" :title="dialogContent.title" :message="dialogContent.message" />
   </main>
 </template>
