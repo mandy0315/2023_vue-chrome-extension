@@ -1,13 +1,10 @@
 import { ref } from 'vue';
 
+import type { SetNotify } from '@/types';
+
 export default () => {
   const isShowNotify = ref(false);
   const notifyContent = ref('');
-
-  interface SetNotify {
-    message: string;
-    duration?: number;
-  }
 
   const setNotify = ({ message, duration = 2000 }: SetNotify) => {
     isShowNotify.value = true;

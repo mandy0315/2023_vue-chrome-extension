@@ -1,4 +1,4 @@
-import { StorageDataOptions, AlarmsOptions } from '@/types/useChromeAPI';
+import type { StorageDataOptions, AlarmsOptions } from '@/types';
 
 export const getCurrentTab = async () => {
   const queryOptions = { active: true, lastFocusedWindow: true };

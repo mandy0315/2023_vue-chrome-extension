@@ -5,13 +5,13 @@ import { useConfirmDialog } from '@/composables/useDialog';
 import { getCurrentTab, setStorageData, getStorageData, openOptions, setBadge } from '@/utils/useChromeAPI';
 import { dateFormat } from '@/utils/useDayTime';
 
-import { TabList } from '@/types/popup';
+import type { Tab } from '@/types';
 
 const tabInfo = ref({
   title: '',
   url: '',
 });
-const tabList = ref<TabList>([]);
+const tabList = ref<Array<Tab>>([]);
 const isRepeatURL = ref(false);
 const isAddTab = ref(true);
 const isDarkMode = ref(false);
@@ -29,9 +29,9 @@ const updateCurrTabInfo = async () => {
 };
 const updateTabList = async () => {
   const storageTabList = await getStorageData('tabList');
-  const arr = Object.values(storageTabList) || [];
+  const arr: Array<Tab> = Object.values(storageTabList) || [];
   if (arr.length > 0) {
-    tabList.value = arr as TabList;
+    tabList.value = arr;
   }
   // test data
   // tabList.value = [
@@ -120,7 +120,7 @@ const saveTab = async () => {
     // 新增Tab
     // - 檢查是否有重複網址
     if (tabList.value.length > 0) {
-      const findUrl = tabList.value.find((tab: TabList[0]) => tab.url === newTab.url);
+      const findUrl = tabList.value.find((tab: Tab) => tab.url === newTab.url);
       if (findUrl) {
         isRepeatURL.value = true;
         return;
@@ -131,14 +131,14 @@ const saveTab = async () => {
     // 編輯Tab
 
     // - 檢查是否有重複網址
-    const filterTabList = tabList.value.filter(tab => tab.url !== editTabUrl.value);
-    const findUrl = filterTabList.find((tab: TabList[0]) => tab.url === newTab.url);
+    const filterTabList = tabList.value.filter((tab: Tab) => tab.url !== editTabUrl.value);
+    const findUrl = filterTabList.find((tab: Tab) => tab.url === newTab.url);
     if (findUrl) {
       isRepeatURL.value = true;
       return;
     }
 
-    newTabList = tabList.value.map((tab: TabList[0]) => {
+    newTabList = tabList.value.map((tab: Tab) => {
       if (tab.url === editTabUrl.value) {
         return newTab;
       }
@@ -159,7 +159,7 @@ const saveTab = async () => {
   }
 };
 const deleteTab = async (currUrl: string) => {
-  tabList.value = tabList.value.filter((tab: TabList[0]) => tab.url !== currUrl);
+  tabList.value = tabList.value.filter((tab: Tab) => tab.url !== currUrl);
   try {
     await setStorageData({ tabList: tabList.value });
     setBadge();

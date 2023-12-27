@@ -1,5 +1,7 @@
 import { ref, nextTick } from 'vue';
 
+import type { ConfirmDialog } from '@/types';
+
 export const useConfirmDialog = () => {
   const isShowDialog = ref(false);
   const dialogContent = ref({
@@ -7,10 +9,6 @@ export const useConfirmDialog = () => {
     message: '',
   });
 
-  interface ConfirmDialog {
-    title: string;
-    message: string;
-  }
   const setConfirmDialog = ({ title, message }: ConfirmDialog): Promise<void> => {
     isShowDialog.value = true;
     dialogContent.value.title = title;
