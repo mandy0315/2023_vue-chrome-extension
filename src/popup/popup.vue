@@ -377,7 +377,7 @@ updatelistLimit();
           class="underline underline-offset-2"
           target="_blank"
           rel="noreferrer noopener"
-          >暫存網址套件</a
+          >SCRATCH URLS 暫存網址套件</a
         >
       </footer>
     </div>
