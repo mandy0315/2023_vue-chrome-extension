@@ -1,6 +1,6 @@
 # SCRATCH URLS 暫存網址
 
-![Imgur](https://i.imgur.com/gxpu6mP.png =320x)
+![Imgur](https://i.imgur.com/gxpu6mP.png)
 
 - [套件下載](https://)
 
