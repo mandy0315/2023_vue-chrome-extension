@@ -5,13 +5,13 @@
   "version": "0.0.1",
   "action": {
     "default_popup": "popup.html",
-    "default_icon": "images/hello_extensions.png"
+    "default_icon": "images/logo/16.png"
   },
   "options_page": "options.html",
   "icons": {
-    "16": "images/hello_extensions.png",
-    "48": "images/hello_extensions.png",
-    "128": "images/hello_extensions.png"
+    "16": "images/logo/16.png",
+    "48": "images/logo/48.png",
+    "128": "images/logo/128.png"
   },
   "background": {
     "service_worker": "background.js",
