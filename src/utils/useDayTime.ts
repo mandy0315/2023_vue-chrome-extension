@@ -5,9 +5,7 @@ dayjs.locale('zh-tw');
 
 export const dateFormat = (date: Date, Format = 'YYYY/MM/DD') => (date ? dayjs(date).format(Format) : '');
 
-export const dateDiff = (date1: string, date2: string, unit: OpUnitType = 'day', abs = 'abs') => {
-  const d = dayjs(date1);
-  const diffDays = abs === 'abs' ? Math.abs(d.diff(date2, unit)) : d.diff(date2, unit);
-
-  return diffDays;
+export const dateDiff = (date1: string | Date, date2: string | Date, unit: OpUnitType = 'day', abs = 'abs'): number => {
+  const diffDays = dayjs(date1).diff(dayjs(date2), unit);
+  return abs === 'abs' ? Math.abs(diffDays) : diffDays;
 };

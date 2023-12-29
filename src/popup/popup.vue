@@ -3,7 +3,7 @@ import { computed, ref } from 'vue';
 import useNotify from '@/composables/useNotify';
 import { useConfirmDialog } from '@/composables/useDialog';
 import { getCurrentTab, setStorageData, getStorageData, openOptions, setBadge } from '@/utils/useChromeAPI';
-import { dateFormat } from '@/utils/useDayTime';
+import { dateFormat, dateDiff } from '@/utils/useDayTime';
 
 import type { Tab } from '@/types';
 
@@ -17,6 +17,7 @@ const isAddTab = ref(true);
 const isDarkMode = ref(false);
 const editTabUrl = ref('');
 const listLimit = ref(10);
+const tabsDeleteDays = ref(0);
 
 const isListOverLimit = computed(() => {
   return tabList.value.length >= listLimit.value;
@@ -33,28 +34,30 @@ const updateTabList = async () => {
   if (arr.length > 0) {
     tabList.value = arr;
   }
+  setBadge();
+
   // test data
   // tabList.value = [
   //   {
   //     title:
   //       '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試1',
   //     url: 'https://www.google.com',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/22',
   //   },
   //   {
   //     title: '測試測試測試測試測試2',
   //     url: 'http://www.chinasgp.cn/article/2824.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/23',
   //   },
   //   {
   //     title: '測試測試測試測試測試3',
   //     url: 'http://www.chinasgp.cn/article/2825.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/24',
   //   },
   //   {
   //     title: '測試測試測試測試測試4',
   //     url: 'http://www.chinasgp.cn/article/2826.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/25',
   //   },
   //   {
   //     title: '測試測試測試測試測試5',
@@ -64,27 +67,27 @@ const updateTabList = async () => {
   //   {
   //     title: '測試測試測試測試測試6',
   //     url: 'http://www.chinasgp.cn/article/2828.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/27',
   //   },
   //   {
   //     title: '測試測試測試測試測試7',
   //     url: 'http://www.chinasgp.cn/article/2829.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/28',
   //   },
   //   {
   //     title: '測試測試測試測試測試8',
   //     url: 'http://www.chinasgp.cn/article/2830.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/29',
   //   },
   //   {
   //     title: '測試測試測試測試測試9',
   //     url: 'http://www.chinasgp.cn/article/2831.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/29',
   //   },
   //   {
   //     title: '測試測試測試測試測試10',
   //     url: 'http://www.chinasgp.cn/article/2832.html',
-  //     updateDate: '2023/12/26',
+  //     updateDate: '2023/12/29',
   //   },
   // ];
 };
@@ -95,6 +98,10 @@ const updatelistLimit = async () => {
     tabList.value = tabList.value.slice(0, listLimit.value);
     await setStorageData({ tabList: tabList.value });
   }
+};
+const updateTabsDeleteDays = async () => {
+  const storageTabsDeleteDays = await getStorageData('tabsDeleteDays');
+  tabsDeleteDays.value = storageTabsDeleteDays || 0;
 };
 
 const toggleAddTab = () => {
@@ -211,6 +218,7 @@ const deleteAllDialog = async () => {
 updateCurrTabInfo();
 updateTabList();
 updatelistLimit();
+updateTabsDeleteDays();
 </script>
 
 <template>
@@ -302,7 +310,13 @@ updatelistLimit();
                 <span class="text-sm pr-2 w-6 text-right text-gray-500 dark:text-gray-100">{{ index + 1 }}</span>
                 <div>
                   <p class="text-xs text-gray-500 dark:text-gray-100">
-                    {{ tab.updateDate }}
+                    {{
+                      dateDiff(tab.updateDate, new Date()) === 0
+                        ? '今天更新'
+                        : dateDiff(tab.updateDate, new Date()) === tabsDeleteDays
+                          ? '今天刪除'
+                          : `${tabsDeleteDays - dateDiff(tab.updateDate, new Date())}天後刪除`
+                    }}
                   </p>
                   <a
                     data-tooltip-group

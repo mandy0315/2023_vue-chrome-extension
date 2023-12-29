@@ -1,5 +1,5 @@
 import { setStorageData, setBadge, createAlarms, getStorageData } from '@/utils/useChromeAPI';
-import { dateDiff, dateFormat } from '@/utils/useDayTime';
+import { dateDiff } from '@/utils/useDayTime';
 
 import type { Tab } from '@/types';
 
@@ -61,11 +61,8 @@ const updateExpirationTabs = async () => {
   if (tabList.length === 0) return;
 
   const newTabList = tabList.filter((tab: Tab) => {
-    const nowDate = dateFormat(new Date());
-    const tabDate = tab.updateDate;
-    const diffDays = dateDiff(nowDate, tabDate, 'day');
-
-    return diffDays <= storageTabsDeleteDays;
+    const diffDays = dateDiff(tab.updateDate, new Date());
+    return diffDays < storageTabsDeleteDays;
   });
 
   await setStorageData({
