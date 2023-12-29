@@ -1,4 +1,5 @@
-import dayjs, { OpUnitType } from 'dayjs';
+import dayjs from 'dayjs';
+import type { OpUnitType } from 'dayjs';
 import 'dayjs/locale/zh-tw';
 dayjs.locale('zh-tw');
 
