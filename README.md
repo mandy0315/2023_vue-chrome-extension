@@ -2,7 +2,7 @@
 
 ![Imgur](https://i.imgur.com/gxpu6mP.png)
 
-- [套件下載](https://)
+- [套件下載](https://chromewebstore.google.com/detail/scratch-urls-%E6%9A%AB%E5%AD%98%E7%B6%B2%E5%9D%80/gbkkndmcljcbpnojgibboccifgnkgobd)
 
 ## 套件版本紀錄
 
