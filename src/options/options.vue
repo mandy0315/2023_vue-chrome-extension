@@ -58,6 +58,7 @@ updateOptions();
         14
       </label>
       天刪除網址
+      <p class="text-xs text-gray-500">＊計算天數於每天晚上 11 點進行更新！</p>
     </div>
     <div class="text-gray-800 pb-2">
       <label class="pr-2">
@@ -73,7 +74,7 @@ updateOptions();
         15
       </label>
       列表限制
-      <span class="text-xs text-gray-500">(縮減列表只保留列表限制數量，其他一律刪除)</span>
+      <p class="text-xs text-gray-500">＊只會保留所選數的列表，剩餘一率刪除！</p>
     </div>
 
     <button @click="saveOptions" class="px-2 py-1 rounded text-sm bg-blue-100 text-blue-500">儲存</button>
