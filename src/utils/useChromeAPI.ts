@@ -34,7 +34,8 @@ export const openOptions = () => {
 export const setBadge = async () => {
   const isShowBadgeCount = await getStorageData('isShowBadgeCount');
   const tabList = await getStorageData('tabList');
-  const tabListLen = Object.values(tabList).length || 0;
+
+  const tabListLen = tabList ? Object.values(tabList).length : 0;
 
   if (isShowBadgeCount) {
     chrome.action.setBadgeText({ text: `${tabListLen}` });
