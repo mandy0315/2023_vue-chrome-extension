@@ -23,6 +23,7 @@ export default [
       'arrow-body-style': 'off',
       'prefer-arrow-callback': 'off',
       'vue/multi-word-component-names': 'off',
+      'vue/require-default-prop': 'off', // Vue 3.5 使用解構預設值語法
       // no-unused-vars 未使用變數不報錯
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
