@@ -3,7 +3,7 @@
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "strict": true,
     "jsx": "preserve",
     "resolveJsonModule": true,
@@ -15,14 +15,14 @@
     "verbatimModuleSyntax": true,
 
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
     "types": [
       "chrome", // 識別 chrome
       "vite/client" // 識別 import.meta.env
     ],
-    "forceConsistentCasingInFileNames": false, // 禁用檢查路徑檔案大小寫
+    "forceConsistentCasingInFileNames": false // 禁用檢查路徑檔案大小寫
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts","src/**/*.vue"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

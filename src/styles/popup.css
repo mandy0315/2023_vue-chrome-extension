@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[data-tooltip-group] [data-tooltip] {
+  display: none;
+}
+
+[data-tooltip-group]:hover [data-tooltip] {
+  display: block;
+}

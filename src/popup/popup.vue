@@ -121,7 +121,7 @@ const saveTab = async () => {
     updateDate: dateFormat(new Date()),
   };
 
-  let newTabList = [];
+  let newTabList;
 
   if (editTabUrl.value === '') {
     // 新增Tab
@@ -229,7 +229,7 @@ updateTabsDeleteDays();
         <i-material-symbols:wb-sunny-rounded v-if="isDarkMode" class="text-white text-[20px]" />
         <i-material-symbols:nights-stay-rounded v-else class="text-white text-[18px]" />
       </button>
-      <button @click="openOptions" class="px-2">
+      <button class="px-2" @click="openOptions">
         <i-material-symbols:settings-rounded class="text-white text-[18px]" />
       </button>
     </header>
@@ -238,7 +238,6 @@ updateTabsDeleteDays();
     >
       <section class="relative">
         <button
-          @click="toggleAddTab"
           :disabled="editTabUrl !== ''"
           class="rounded-b-md inline-block py-1 px-2 absolute top-0 right-2 shadow border-l border-r border-b"
           :class="
@@ -246,6 +245,7 @@ updateTabsDeleteDays();
               ? 'bg-gray-100 text-gray-300 dark:bg-gray-800 dark:text-gray-400'
               : ' bg-white text-gray-500 dark:bg-gray-600 dark:text-gray-100'
           "
+          @click="toggleAddTab"
         >
           <i-ic:outline-remove-circle v-if="isAddTab" class="inline-block text-base" />
           <i-material-symbols:add-circle-rounded v-else class="inline-block text-base" />
@@ -263,21 +263,20 @@ updateTabsDeleteDays();
               </p>
             </div>
             <input
-              type="text"
               v-model="tabInfo.title"
+              type="text"
               placeholder="輸入網址名稱"
               :disabled="isListOverLimit"
               class="block text-base w-full border-gray-200 border rounded-md p-1 mb-2 dark:text-gray-100 dark:bg-gray-600 dark:border-gray-400"
             />
             <input
-              type="text"
               v-model="tabInfo.url"
+              type="text"
               placeholder="輸入網址"
               :disabled="isListOverLimit"
               class="block w-full text-base border-gray-200 border rounded-md p-1 mb-2 dark:text-gray-100 dark:bg-gray-600 dark:border-gray-400"
             />
             <button
-              @click="saveTab"
               :disabled="isListOverLimit"
               class="px-2 py-1 rounded text-sm"
               :class="
@@ -285,6 +284,7 @@ updateTabsDeleteDays();
                   ? 'cursor-not-allowed bg-gray-200 text-gray-400 dark:bg-gray-600 dark:text-gray-400'
                   : 'bg-blue-100 text-blue-500 dark:bg-gray-600 dark:text-white'
               "
+              @click="saveTab"
             >
               儲存
             </button>
@@ -297,8 +297,8 @@ updateTabsDeleteDays();
             <h2 class="text-base font-black text-gray-500 pr-2 dark:text-gray-100">暫存列表</h2>
             <span class="text-gray-500 text-sm dark:text-gray-100">＊限制暫存 {{ listLimit }} 列網址</span>
             <button
-              @click="deleteAllDialog"
               class="px-2 py-1 rounded text-sm ml-auto bg-red-100 text-red-500 dark:bg-gray-600 dark:text-white"
+              @click="deleteAllDialog"
             >
               全部刪除
             </button>
@@ -341,7 +341,7 @@ updateTabsDeleteDays();
                 </div>
 
                 <div class="ml-auto flex items-center">
-                  <button @click="editTab(tab.title, tab.url)" class="px-1">
+                  <button class="px-1" @click="editTab(tab.title, tab.url)">
                     <i-material-symbols:edit-square-rounded class="text-gray-500 text-base dark:text-gray-100" />
                   </button>
                   <button class="px-1" @click="deleteTab(tab.url)">
@@ -352,26 +352,26 @@ updateTabsDeleteDays();
               <div v-if="editTabUrl === tab.url" class="bg-gray-100 px-4 py-2 dark:bg-gray-800">
                 <p v-if="isRepeatURL" class="text-red-600 text-sm pb-1">* 網址已經存在，請重新確認 !</p>
                 <input
-                  type="text"
                   v-model="tabInfo.title"
+                  type="text"
                   placeholder="輸入網址名稱"
                   class="block w-full border-gray-200 text-sm border rounded-md dark:text-gray-100 p-1 mb-2 dark:bg-gray-600 dark:border-gray-400"
                 />
                 <input
-                  type="text"
                   v-model="tabInfo.url"
+                  type="text"
                   placeholder="輸入網址"
                   class="block w-full border-gray-200 text-sm border rounded-md p-1 dark:text-gray-100 mb-2 dark:bg-gray-600 dark:border-gray-400"
                 />
                 <button
-                  @click="saveTab"
                   class="bg-blue-100 text-blue-500 px-2 py-1 mr-2 rounded text-sm dark:bg-gray-600 dark:text-white"
+                  @click="saveTab"
                 >
                   修改
                 </button>
                 <button
-                  @click="cancelTab"
                   class="bg-blue-100 text-blue-500 px-2 py-1 rounded text-sm dark:bg-gray-600 dark:text-white"
+                  @click="cancelTab"
                 >
                   取消
                 </button>
@@ -405,6 +405,7 @@ updateTabsDeleteDays();
   &::-webkit-scrollbar {
     @apply w-[6px] bg-gray-200;
   }
+
   &::-webkit-scrollbar-thumb {
     @apply rounded bg-blue-200 dark:bg-gray-500;
   }

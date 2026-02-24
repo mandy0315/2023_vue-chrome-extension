@@ -19,13 +19,7 @@ export default defineConfig({
       '@': resolve(__dirname, './src'),
     },
   },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        charset: false,
-      },
-    },
-  },
+
   build: {
     rollupOptions: {
       input: {
@@ -34,16 +28,20 @@ export default defineConfig({
         background: resolve(__dirname, 'src/background.ts'),
       },
       output: {
+        // 入口檔案命名：背景腳本放根目錄，其他放 js/ 資料夾
         entryFileNames: chunkInfo => {
-          return chunkInfo.name === 'background' ? `[name].js` : `js/[name].js`;
+          return chunkInfo.name === 'background' ? '[name].js' : 'js/[name].js';
         },
-        chunkFileNames: `js/[name].js`,
-        assetFileNames: chunkInfo => {
-          const fileExtName = chunkInfo.name.split('.')[chunkInfo.name.split('.').length - 1];
-          const filesPath = {
-            css: `css/[name].[ext]`,
-          };
-          return fileExtName ? `assets/${filesPath[fileExtName]}` : `assets/[name].[ext]`;
+
+        // 程式碼分割檔案：統一放 js/ 資料夾
+        chunkFileNames: 'js/[name]-[hash].js',
+
+        // 靜態資源檔案：CSS 放 css/，其他放 assets/
+        assetFileNames: assetInfo => {
+          if (assetInfo.name?.endsWith('.css')) {
+            return 'css/[name].[ext]';
+          }
+          return 'assets/[name].[ext]';
         },
       },
     },
