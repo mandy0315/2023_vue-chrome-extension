@@ -30,7 +30,7 @@ const updateCurrTabInfo = async () => {
 };
 const updateTabList = async () => {
   const storageTabList = await getStorageData('tabList');
-  const arr: Array<Tab> = Object.values(storageTabList) || [];
+  const arr: Tab[] = storageTabList ? Object.values(storageTabList) : [];
   if (arr.length > 0) {
     tabList.value = arr;
   }
