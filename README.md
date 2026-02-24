@@ -16,6 +16,14 @@
 - 日期改刪除天數
 - 注意事項
 
+3. v1.0.2
+
+- 修復初始化錯誤（Cannot convert undefined to object）
+- 改用 CSS 取代 SCSS
+- 更新套件與配置
+- 更換分頁權限
+
+
 ## 專案架構
 
 ```
