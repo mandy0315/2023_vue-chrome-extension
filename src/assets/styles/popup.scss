@@ -1,2 +1,15 @@
-@import './_tailwind.scss';
-@import './_custom.scss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[data-tooltip-group] {
+  [data-tooltip] {
+    display: none;
+  }
+
+  &:hover {
+    [data-tooltip] {
+      display: block;
+    }
+  }
+}
