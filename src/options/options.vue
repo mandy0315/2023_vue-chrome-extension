@@ -77,7 +77,7 @@ updateOptions();
       <p class="text-xs text-gray-500">＊只會保留所選數的列表，剩餘一率刪除！</p>
     </div>
 
-    <button @click="saveOptions" class="px-2 py-1 rounded text-sm bg-blue-100 text-blue-500">儲存</button>
+    <button class="px-2 py-1 rounded text-sm bg-blue-100 text-blue-500" @click="saveOptions">儲存</button>
 
     <global-notify v-if="isShowNotify" :message="notifyContent" />
   </main>
