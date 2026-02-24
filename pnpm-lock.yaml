@@ -54,9 +54,6 @@ importers:
       prettier:
         specifier: ^3.1.1
         version: 3.8.1
-      sass:
-        specifier: ^1.97.3
-        version: 1.97.3
       tailwindcss:
         specifier: ^3.3.6
         version: 3.4.19
@@ -2179,6 +2176,7 @@ snapshots:
   chokidar@4.0.3:
     dependencies:
       readdirp: 4.1.2
+    optional: true
 
   commander@4.1.1: {}
 
@@ -2409,7 +2407,8 @@ snapshots:
 
   ignore@7.0.5: {}
 
-  immutable@5.1.4: {}
+  immutable@5.1.4:
+    optional: true
 
   imurmurhash@0.1.4: {}
 
@@ -2639,7 +2638,8 @@ snapshots:
     dependencies:
       picomatch: 2.3.1
 
-  readdirp@4.1.2: {}
+  readdirp@4.1.2:
+    optional: true
 
   resolve@1.22.11:
     dependencies:
@@ -2691,6 +2691,7 @@ snapshots:
       source-map-js: 1.2.1
     optionalDependencies:
       '@parcel/watcher': 2.5.6
+    optional: true
 
   semver@7.7.4: {}
 
